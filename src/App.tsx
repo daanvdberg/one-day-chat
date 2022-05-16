@@ -2,6 +2,8 @@
 import React from 'react';
 import { css, Global } from '@emotion/react'
 import { createStyles } from './types/emotion-styles';
+import Chat from './modules/chat/chat';
+import Settings from './modules/settings/settings';
 
 const styles = createStyles({
     container: {
@@ -19,8 +21,11 @@ const styles = createStyles({
 });
 
 function App() {
+
+    const { container, sidebar, main } = styles;
+
     return (
-        <div css={styles.container}>
+        <div css={container}>
             <Global
                 styles={css`
                     body {
@@ -36,11 +41,11 @@ function App() {
                     }
                 `}
             />
-            <div css={styles.sidebar}>
-                Settings
+            <div css={sidebar}>
+                <Settings />
             </div>
-            <div css={styles.main}>
-                Chat
+            <div css={main}>
+                <Chat />
             </div>
         </div>
     );
