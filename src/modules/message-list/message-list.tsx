@@ -10,6 +10,7 @@ import { Button } from '../../components/button/button';
 import { FaArrowUp } from 'react-icons/fa';
 import { createStyles } from '../../types/emotion-styles';
 import variables from '../../assets/css/style-variables';
+import { List } from './elements/list';
 
 const styles = createStyles({
     messageList: {
@@ -128,7 +129,7 @@ function MessageList() {
                 </Button>
             ) : null}
 
-            {messages.map(message => <Message key={message.messageId} message={message} />)}
+            <List messages={messages} />
 
             {failedMessages.map(message => <Message key={message.messageId} message={message} failed={true} />)}
 
