@@ -1,25 +1,33 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import styled from '@emotion/styled';
 import { createStyles } from '../../types/emotion-styles';
-import { Channel, GlobalState, GlobalStateInterface, UserId } from '../../globalContext';
+import { useGlobalState } from '../../store';
 import variables from '../../assets/css/style-variables';
-import Select, { SingleValue } from 'react-select';
+import { ChannelId, UserId } from '../../types/global-types';
+import { ChannelButton } from './elements/channel-button';
+import { UserSelect } from './elements/user-select';
 
 const styles = createStyles({
     container: {
         height: '100%',
-        padding: '15px',
         borderRight: `1px solid ${variables.borderColor}`
     },
     section: {
-        marginBottom: '15px'
+        padding: '20px 15px',
+        '& + &': {
+            borderTop: `1px solid ${variables.borderColor}`
+        }
+    },
+    sectionLabel: {
+        display: 'block',
+        marginBottom: 10,
+        fontSize: 20
     }
 });
 
 const options: Option[] = [
     { value: UserId.Joyse, label: UserId[UserId.Joyse] },
-    { value: UserId.Russel, label: UserId[UserId.Russel] },
+    { value: UserId.Russell, label: UserId[UserId.Russell] },
     { value: UserId.Sam, label: UserId[UserId.Sam] }
 ];
 
@@ -28,68 +36,63 @@ type Option = {
     value: UserId;
 }
 
-type ButtonProps = {
-    active: boolean
-}
-
-const Button = styled.button<ButtonProps>`
-  display: flex;
-  align-items: center;
-  height: 50px;
-  padding: 15px;
-  color: ${variables.primaryColor};
-  border: 0;
-  width: 100%;
-  background-color: ${props => props.active ? '#e6e6e6' : 'transparent'};
-  cursor: ${props => props.active ? 'default' : 'pointer'};
-
-  &:hover {
-    background-color: ${props => props.active ? '#e6e6e6' : '#f7f7f7'};
-  }
-`;
-
 function Settings() {
 
-    const { container, section } = styles;
+    const { container, section, sectionLabel } = styles;
 
-    const { userId, setUserId, channel, setChannel } = React.useContext(GlobalState) as GlobalStateInterface;
+    const { state: { channel, userId = UserId.Joyse, requestPending = false }, setState } = useGlobalState();
 
-    const handleSetUserId = (option: SingleValue<Option> | null) => {
-        if (option) {
-            setUserId(option.value);
-        }
+    const handleSetUserId = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const newUserId: UserId = UserId[event.target.value as keyof typeof UserId];
+        setState((prev) => ({ ...prev, userId: newUserId }));
     };
 
-    const handleSetChannel = (id: Channel) => {
-        setChannel(id as Channel);
+    const handleSetChannel = (id: ChannelId) => {
+        setState((prev) => ({ ...prev, channel: id }));
     };
 
     return (
         <div css={container}>
             <div css={section}>
-                <label htmlFor="username-select">
-                    1. Choose user
+                <label css={sectionLabel}>
+                    Choose user
                 </label>
-                <Select
+                <UserSelect
                     name="username"
-                    value={options.find(item => item.value === userId)}
+                    value={UserId[userId]}
                     onChange={handleSetUserId}
-                    options={options}
-                />
+                    disabled={requestPending}
+                >
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                </UserSelect>
             </div>
             <div css={section}>
-                <label>
-                    2. Choose your Channel
+                <label css={sectionLabel}>
+                    Choose your Channel
                 </label>
-                <Button onClick={() => handleSetChannel(Channel.General)} active={channel === Channel.General}>
+                <ChannelButton
+                    onClick={() => handleSetChannel(ChannelId.General)}
+                    active={channel === ChannelId.General}
+                    disabled={requestPending}
+                >
                     General Channel
-                </Button>
-                <Button onClick={() => handleSetChannel(Channel.Technology)} active={channel === Channel.Technology}>
+                </ChannelButton>
+                <ChannelButton
+                    onClick={() => handleSetChannel(ChannelId.Technology)}
+                    active={channel === ChannelId.Technology}
+                    disabled={requestPending}
+                >
                     Technology Channel
-                </Button>
-                <Button onClick={() => handleSetChannel(Channel.LGTM)} active={channel === Channel.LGTM}>
+                </ChannelButton>
+                <ChannelButton
+                    onClick={() => handleSetChannel(ChannelId.LGTM)}
+                    active={channel === ChannelId.LGTM}
+                    disabled={requestPending}
+                >
                     LGTM Channel
-                </Button>
+                </ChannelButton>
             </div>
         </div>
     );
