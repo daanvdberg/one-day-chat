@@ -23,3 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 /.idea
+
+# graphql
+__generated__
+src/graphql-schema.json
