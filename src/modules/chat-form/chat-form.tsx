@@ -9,8 +9,6 @@ import { useLocalStorage } from 'usehooks-ts';
 import { createStyles } from '../../types/emotion-styles';
 import variables from '../../assets/css/style-variables';
 import { Button } from '../../components/button/button';
-import { LATEST_MESSAGES } from '../message-list/graphql/fetch-latest-messages';
-import { FETCH_MORE_MESSAGES } from '../message-list/graphql/fetch-more-messages';
 
 const styles = createStyles({
     form: {

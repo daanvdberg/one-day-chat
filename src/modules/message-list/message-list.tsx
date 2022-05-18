@@ -83,11 +83,17 @@ function MessageList() {
         }
     });
 
-    const [ getMoreMessages, { loading: loadingFM, error: errorFM }] = useLazyQuery<MoreMessagesListData, MoreMessagesListVars>(FETCH_MORE_MESSAGES);
+    const [ getMoreMessages, { loading: loadingFM }] =
+        useLazyQuery<MoreMessagesListData, MoreMessagesListVars>(FETCH_MORE_MESSAGES, {
+            fetchPolicy: 'no-cache',
+            nextFetchPolicy: 'no-cache'
+        });
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleLoadMore = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         getMoreMessages({
+            fetchPolicy: 'no-cache',
+            notifyOnNetworkStatusChange: true,
             variables: {
                 channelId: channel,
                 messageId: messages[0].messageId,
@@ -121,7 +127,7 @@ function MessageList() {
         <div css={messageList}>
             {(!resultIsEmpty && messages.length >= 10) ? (
                 <Button
-                    onClick={handleClick}
+                    onClick={handleLoadMore}
                     icon={<FaArrowUp />}
                     css={button}
                 >
