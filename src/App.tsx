@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { css, Global } from '@emotion/react'
+import 'normalize.css';
+import { Global } from '@emotion/react'
 import { createStyles } from './types/emotion-styles';
 import Chat from './modules/chat/chat';
 import Settings from './modules/settings/settings';
+import GlobalStyles from './assets/css/global-styles';
 
 const styles = createStyles({
     container: {
@@ -26,21 +28,7 @@ function App() {
 
     return (
         <div css={container}>
-            <Global
-                styles={css`
-                    body {
-                        margin: 0;
-                        padding: 0;
-                        min-height: 100vh;
-                        max-width: 100vw;
-                        font-family: 'Source Sans Pro', sans-serif;
-                    }
-                    h1,h2,h3,h4,h5,h6 {
-                        font-family: 'Montserrat', sans-serif;
-                        font-weight: bold;
-                    }
-                `}
-            />
+            <Global styles={GlobalStyles}/>
             <div css={sidebar}>
                 <Settings />
             </div>
