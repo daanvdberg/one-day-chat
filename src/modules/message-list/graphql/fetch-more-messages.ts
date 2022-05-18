@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const FETCH_MORE_MESSAGES = gql`
-    query fetchMoreMessages(
+    query MessagesFetchMore(
         $channelId: ChannelId!
         $messageId: String!
         $old: Boolean!
